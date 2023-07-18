@@ -1,0 +1,497 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fswiss\fprq2\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue0;}
+{\*\generator Riched20 10.0.22000}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\b\f0\fs24\lang9 1\cf1  Write a simple Java Program to print factorial of a given number using recursion. \b0\par
+\par
+\cf0\fs22 public class FactorialCalculator \{\par
+    public static void main(String[] args) \{\par
+        int number = 5; // The number for which we want to calculate the factorial\par
+        int factorial = calculateFactorial(number);\par
+        System.out.println("Factorial of " + number + " is: " + factorial);\par
+    \}\par
+    public static int calculateFactorial(int number) \{\par
+        if (number == 0 || number == 1) \{\par
+            return 1;\par
+        \} else \{\par
+            return number * calculateFactorial(number - 1);\par
+        \}\par
+    \}\par
+\}\par
+///////////////////////\fs44 ////////\fs22\par
+\b\fs24 2 \cf1 Write a Java program to implement student information in a file and perform the           operations on it \tab\cf0\fs22\par
+\b0\par
+import java.io.*;\par
+import java.util.Scanner;\par
+\par
+public class StudentInformationSystem \{\par
+    private static final String FILE_NAME = "student_info.txt";\par
+\par
+    public static void main(String[] args) \{\par
+        Scanner scanner = new Scanner(System.in);\par
+        int choice;\par
+\par
+        do \{\par
+            System.out.println("********** Student Information System **********");\par
+            System.out.println("1. Add Student");\par
+            System.out.println("2. Display All Students");\par
+            System.out.println("3. Search Student by ID");\par
+            System.out.println("4. Delete Student by ID");\par
+            System.out.println("0. Exit");\par
+            System.out.print("Enter your choice: ");\par
+            choice = scanner.nextInt();\par
+            scanner.nextLine(); // Consume the newline character\par
+\par
+            switch (choice) \{\par
+                case 1:\par
+                    addStudent();\par
+                    break;\par
+                case 2:\par
+                    displayAllStudents();\par
+                    break;\par
+                case 3:\par
+                    searchStudentByID();\par
+                    break;\par
+                case 4:\par
+                    deleteStudentByID();\par
+                    break;\par
+                case 0:\par
+                    System.out.println("Exiting the program... Goodbye!");\par
+                    break;\par
+                default:\par
+                    System.out.println("Invalid choice. Please try again.");\par
+                    break;\par
+            \}\par
+\par
+            System.out.println();\par
+        \} while (choice != 0);\par
+    \}\par
+\par
+    private static void addStudent() \{\par
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_NAME, true))) \{\par
+            Scanner scanner = new Scanner(System.in);\par
+\par
+            System.out.println("***** Add Student *****");\par
+            System.out.print("Enter student ID: ");\par
+            int id = scanner.nextInt();\par
+            scanner.nextLine(); // Consume the newline character\par
+\par
+            System.out.print("Enter student name: ");\par
+            String name = scanner.nextLine();\par
+\par
+            System.out.print("Enter student age: ");\par
+            int age = scanner.nextInt();\par
+            scanner.nextLine(); // Consume the newline character\par
+\par
+            writer.println(id + "," + name + "," + age);\par
+            System.out.println("Student added successfully!");\par
+        \} catch (IOException e) \{\par
+            System.out.println("An error occurred while adding the student.");\par
+            e.printStackTrace();\par
+        \}\par
+    \}\par
+\par
+    private static void displayAllStudents() \{\par
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) \{\par
+            System.out.println("***** Displaying All Students *****");\par
+            String line;\par
+\par
+            while ((line = reader.readLine()) != null) \{\par
+                String[] parts = line.split(",");\par
+                int id = Integer.parseInt(parts[0]);\par
+                String name = parts[1];\par
+                int age = Integer.parseInt(parts[2]);\par
+\par
+                System.out.println("ID: " + id);\par
+                System.out.println("Name: " + name);\par
+                System.out.println("Age: " + age);\par
+                System.out.println("---------------------");\par
+            \}\par
+        \} catch (IOException e) \{\par
+            System.out.println("An error occurred while displaying students.");\par
+            e.printStackTrace();\par
+        \}\par
+    \}\par
+\par
+    private static void searchStudentByID() \{\par
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) \{\par
+            Scanner scanner = new Scanner(System.in);\par
+\par
+            System.out.println("***** Search Student by ID *****");\par
+            System.out.print("Enter student ID: ");\par
+            int searchID = scanner.nextInt();\par
+            scanner.nextLine(); // Consume the newline character\par
+\par
+            String line;\par
+\par
+            while ((line = reader.readLine()) != null) \{\par
+                String[] parts = line.split(",");\par
+                int id = Integer.parseInt(parts[0]);\par
+\par
+                if (id == searchID) \{\par
+                    String name = parts[1];\par
+                    int age = Integer.parseInt(parts[2]);\par
+\par
+                    System.out.println("ID: " + id);\par
+                    System.out.println("Name: " + name);\par
+                    System.out.println("Age: " + age);\par
+                    return;\par
+                \}\par
+            \}\par
+\par
+            System.out.println("Student with ID " + searchID + " not found.");\par
+        \} catch (IOException e) \{\par
+            System.out.println("An error occurred while searching for the student.");\par
+            e.printStackTrace();\par
+        \}\par
+    \}\par
+\par
+    private static void deleteStudentByID() \{\par
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME));\par
+             PrintWriter writer = new PrintWriter(new FileWriter("temp.txt"))) \{\par
+            Scanner scanner = new Scanner(System.in);\par
+\par
+            System.out.println("***** Delete Student by ID *****");\par
+            System.out.print("Enter student ID: ");\par
+            int deleteID = scanner.nextInt();\par
+            scanner.nextLine(); // Consume the newline character\par
+\par
+            String line;\par
+\par
+            while ((line = reader.readLine()) != null) \{\par
+                String[] parts = line.split(",");\par
+                int id = Integer.parseInt(parts[0]);\par
+\par
+                if (id != deleteID) \{\par
+                    writer.println(line);\par
+                \}\par
+            \}\par
+\par
+            File file = new File(FILE_NAME);\par
+            File tempFile = new File("temp.txt");\par
+            file.delete();\par
+            tempFile.renameTo(file);\par
+\par
+            System.out.println("Student with ID " + deleteID + " deleted successfully!");\par
+        \} catch (IOException e) \{\par
+            System.out.println("An error occurred while deleting the student.");\par
+            e.printStackTrace();\par
+        \}\par
+    \}\par
+\}\par
+\par
+\par
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////\par
+
+\pard\sa160\sl259\slmult0\b\fs24 .\cf1 Q)   Write a simple Java program to generate 5 random numbers.\cf0\b0\par
+
+\pard\sa200\sl276\slmult1\fs22\par
+\par
+import java.lang.Math;   \par
+public class RandomNumberExample1  \par
+\{   \par
+public static void main(String args[])   \par
+\{   \par
+// Generating random numbers  \par
+System.out.println("1st Random Number: " + Math.random());   \par
+System.out.println("2nd Random Number: " + Math.random());  \par
+System.out.println("3rd Random Number: " + Math.random());   \par
+System.out.println("4th Random Number: " + Math.random());   \par
+\}   \par
+\}  \par
+\par
+////////////////////////////////////////////////////////////////////////////////////////////////////////////\par
+
+\pard\sa160\sl259\slmult0\fs24\par
+
+\pard\sa200\sl276\slmult1 Q. 2.\fs22  \cf1\b\fs24 Write a program to design Registration process form using Applet and AWT components\par
+\cf0\b0\fs22\par
+
+\pard\nowidctlpar\li360\sa200\sl276\slmult1\cf1\f1\fs24 import java.awt.*;\par
+import java.awt.event.*;\par
+import java.applet.*;\par
+public class RegistrationForm extends Frame \par
+\{\par
+\tab TextField t,email1,nm1,enrollment_no1,address1,password1;\par
+\tab Checkbox hobby1,hobby2,hobby3,hobby4,hobby5,male,female,Other,ce,me,ec;\par
+\tab CheckboxGroup gender1,branch1;\par
+\tab Button signup;\par
+\tab Choice clg1;\par
+\tab Label nm,enrollment_no,address,email,password,hobby,gender,branch,clg;\par
+\tab Button b1;\par
+\tab public RegistrationForm()\par
+\tab\{\par
+\tab\tab\par
+\tab\tab setTitle("RegsrationForm");\par
+\tab\tab setBackground(Color.cyan);\par
+\tab\tab setSize(353,350);\par
+\tab\tab setVisible(true);\par
+\tab\tab\par
+\tab\tab setLayout(new FlowLayout());\par
+\tab\tab\par
+\tab\tab nm=new Label("Enter Name");\tab\par
+\tab\tab add(nm);\par
+\tab\tab nm1=new TextField(20);\par
+\tab\tab add(nm1);\par
+\tab\tab\par
+\tab\tab enrollment_no=new Label("Enter Your Enrollment No");\par
+\tab\tab add(enrollment_no);\par
+\tab\tab enrollment_no1=new TextField(18);\par
+\tab\tab add(enrollment_no1);\par
+\tab\tab\par
+\tab\tab address=new Label("Enter Your Address");\par
+\tab\tab add(address);\par
+\tab\tab address1=new TextField(20);\par
+\tab\tab add(address1);\par
+\tab\tab\par
+\tab\tab hobby=new Label("Select Your Hobby");\par
+\tab\tab add(hobby);\par
+\tab\tab hobby1=new Checkbox("Coding");\par
+\tab\tab hobby2=new Checkbox("Study");\par
+\tab\tab hobby3=new Checkbox("Programming");\par
+\tab\tab hobby4=new Checkbox("photography");\par
+\tab\tab hobby5=new Checkbox("Cricket");\par
+\tab\tab add(hobby1);\par
+\tab\tab add(hobby2);\par
+\tab\tab add(hobby3);\par
+\tab\tab add(hobby4);\par
+\tab\tab add(hobby5);\par
+\tab\tab\par
+\tab\tab gender=new Label("Select Your Gender");\par
+\tab\tab add(gender);\par
+\tab\tab gender1=new CheckboxGroup();\par
+\tab\tab male=new Checkbox("Male",gender1,false);\par
+\tab\tab female=new Checkbox("Female",gender1,false);\par
+\tab\tab Other=new Checkbox("Other",gender1,false);\par
+\tab\tab add(male);\par
+\tab\tab add(female);\par
+\tab\tab\par
+\tab\tab branch=new Label("Select Branch");\par
+\tab\tab add(branch);\par
+\tab\tab branch1=new CheckboxGroup();\par
+\tab\tab ce=new Checkbox("CE.",branch1,false);\par
+\tab\tab me=new Checkbox("Mech",branch1,false);\par
+\tab\tab ec=new Checkbox("EC",branch1,false);\par
+\tab\tab add(ce);\par
+\tab\tab add(me);\par
+\tab\tab add(ec);\par
+\tab\tab\par
+\tab\tab clg=new Label("Select Your Collage");\par
+\tab\tab add(clg);\par
+\tab\tab clg1=new Choice();\par
+\tab\tab clg1.add("GTU");\par
+\tab\tab clg1.add("MSU");\par
+\tab\tab clg1.add("LD Engg");\par
+\tab\tab clg1.add("NIRMA");\par
+\tab\tab add(clg1);\par
+\tab\tab\par
+\tab\tab email=new Label("Enter Your email");\par
+\tab\tab add(email);\par
+\tab\tab email1=new TextField(20);\par
+\tab\tab add(email1);\par
+\tab\tab\par
+\tab\tab password=new Label("Enter Your Password");\tab\par
+\tab\tab add(password);\par
+\tab\tab password1=new TextField(20);\par
+\tab\tab password1.setEchoChar('*');\par
+\tab\tab add(password1);\par
+\tab\tab\par
+\tab\tab signup=new Button("Sign Up Now");\par
+\tab\tab add(signup);\par
+\tab\tab\par
+\tab\}\par
+\tab public static void main(String s[])\par
+\tab\{\par
+\tab\tab\tab RegistrationForm r1=new RegistrationForm();\par
+\tab\}\par
+\tab\tab\par
+\}\par
+
+\pard\sa200\sl276\slmult1 // step 1: Save the code in a file named RegistrationForm.java.\par
+// javac RegistrationForm.java\par
+// java RegistrationForm\par
+\par
+// The registration form window will open, displaying the various input fields and //buttons. You can interact with the form by entering the required information and //clicking the "Sign Up Now" button.\par
+\par
+// Note: The provided code uses the AWT library, which is a bit outdated. In modern //Java GUI development, it is recommended to use Swing or JavaFX for more robust and //feature-rich graphical interfaces\par
+\par
+//////////////////////////////////////////////////////////////////////////////////////////////////////////\par
+
+\pard\nowidctlpar\li360\sa200\sl276\slmult1\cf0\f0 Q)   /\cf1\b\f1 Write a simple Java Program to implement stack using Queue interface\par
+import java.util.Queue;\par
+import java.util.LinkedList;\par
+class Main \{\par
+  public static void main(String[] args) \{\par
+    // Creating Queue using the LinkedList class\par
+    Queue<Integer> numbers = new LinkedList<>();\par
+\par
+    // enqueue\par
+    // insert element at the rear of the queue\par
+    numbers.offer(1);\par
+    numbers.offer(2);\par
+    numbers.offer(3);\par
+    System.out.println("Queue: " + numbers);\par
+\par
+    // dequeue\par
+    // delete element from the front of the queue\par
+    int removedNumber = numbers.poll();\par
+    System.out.println("Removed Element: " + removedNumber);\par
+\par
+    System.out.println("Queue after deletion: " + numbers);\par
+    \}\par
+\}\par
+\par
+///////////////////////////////////////////////////////////////////////////////////////\par
+
+\pard\nowidctlpar\sa200\sl276\slmult1\cf0\f0 Q. \cf1\f1 Write a JAVA Servlet Program to implement and demonstrate get() and Post methods(Using HTTP Servlet Class).\b0\par
+\par
+index.html\par
+<html><head><title>Demonstration of Get and Post Method</title></head>\par
+<body bgcolor="pink">\par
+<center>\par
+<form action="Prog3" method="post">\par
+<a href="Prog3"><b>Click here to call get method</b></a><br><br>\par
+<p><b>Press submit button to call Post method</b></p><br><B>color:</B>\par
+<select name="color" size="1">\par
+<option value="red">red</option>\par
+<option value="green">green</option>\par
+<option value="blue">blue</option>\par
+</select><br><br>\par
+<input type=submit value="submit">\par
+</form>\par
+</body>\par
+</html>\par
+\par
+Prog3.java (Servlet File)\par
+\par
+import java.io.*;\par
+import javax.servlet.*;\par
+import javax.servlet.http.*;\par
+public class Prog3 extends HttpServlet\par
+\{\par
+public void doPost(HttpServletRequest request, HttpServletResponse response)\par
+throws ServletException,IOException\par
+\{\par
+String color=request.getParameter("color");\par
+response.setContentType("text/html");\par
+try (PrintWriter out = response.getWriter()) \{\par
+out.println("<!DOCTYPE html>");\par
+out.println("<html>");\par
+out.println("<head>");\par
+out.println("<title>Servlet Prog3</title>");\par
+out.println("</head>");\par
+out.println("<body bgcolor="+color+">");\par
+out.println("<b>Hello from Post method</b><br><br>");\par
+out.println("You have selected" + " " + color + " " + "color");\par
+out.println("</body></html>");\par
+\}\par
+\}\par
+public void doGet(HttpServletRequest request, HttpServletResponse response)\par
+throws ServletException,IOException\par
+\{\par
+response.setContentType("text/html");\par
+try (PrintWriter out = response.getWriter())\par
+\{\par
+out.println("<b>Hello from Get method</b>");\par
+out.println("<h1>Welcome to AIT</h1>");\par
+\}\par
+\}\par
+
+\pard\nowidctlpar\li360\sa200\sl276\slmult1\b\par
+
+\pard\sa200\sl276\slmult1\cf0\b0\f0\fs22 ////////////////////////////////////////////////////////////////////////////////////////////////////////////\par
+\par
+
+\pard\nowidctlpar\li360\sa200\sl276\slmult1\cf1\f1\fs24 2\b . Write a simple Java Program to Implement stack using Stack class\par
+import java.util.Stack;\par
+\b0\par
+class Main \{\par
+  public static void main(String[] args) \{\par
+\par
+    // create an object of Stack class\par
+    Stack<String> animals= new Stack<>();\par
+\par
+    // push elements to top of stack\par
+    animals.push("Dog");\par
+    animals.push("Horse");\par
+    animals.push("Cat");\par
+    System.out.println("Stack: " + animals);\par
+\par
+    // pop element from top of stack\par
+    animals.pop();\par
+    System.out.println("Stack after pop: " + animals);\par
+  \}\par
+\}\par
+////////////////////////////////////////////////////////////////////////////////////////////////////////////\par
+
+\pard\fi360\sa200\sl276\slmult1\cf0\b\f0 Q. 2\cf1  Write JSP Program to validate username and password\b0\par
+
+\pard\nowidctlpar\li360\sa200\sl276\slmult1\f1 import java.io.IOException;\par
+import javax.servlet.ServletException;\par
+import javax.servlet.annotation.WebServlet;\par
+import javax.servlet.http.HttpServlet;\par
+import javax.servlet.http.HttpServletRequest;\par
+import javax.servlet.http.HttpServletResponse;\par
+\par
+@WebServlet("/login")\par
+public class LoginServlet extends HttpServlet \{\par
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)\par
+            throws ServletException, IOException \{\par
+        String username = request.getParameter("username");\par
+        String password = request.getParameter("password");\par
+\par
+        if (username.equals("admin") && password.equals("admin123")) \{\par
+            response.sendRedirect("success.jsp");\par
+        \} else \{\par
+            response.sendRedirect("failure.jsp");\par
+        \}\par
+    \}\par
+\}\par
+\par
+///////////////////////////////////////////////////////////////////\par
+\par
+
+\pard\sa200\sl276\slmult1\cf0\f0 Q. 1\cf1  \b Write a java Program to implement thread using runnable interface\b0\par
+
+\pard\nowidctlpar\li360\sa200\sl276\slmult1\f1 public class MyRunnable implements Runnable \{\par
+    public void run() \{\par
+        // Code to be executed in the thread\par
+        System.out.println("Thread is running.");\par
+    \}\par
+\par
+    public static void main(String[] args) \{\par
+        // Create an instance of the class implementing Runnable\par
+        MyRunnable myRunnable = new MyRunnable();\par
+\par
+        // Create a thread and pass the instance of the Runnable\par
+        Thread thread = new Thread(myRunnable);\par
+\par
+        // Start the thread\par
+        thread.start();\par
+    \}\par
+\}\par
+/////////////////////////////////////////////////////////////////////////\par
+\b  Write JSP program to print current date & time\b0\par
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>\par
+<!DOCTYPE html>\par
+<html>\par
+<head>\par
+    <title>Current Date and Time</title>\par
+</head>\par
+<body>\par
+    <h1>Current Date and Time</h1>\par
+    \par
+    <%-- JSP code to print the current date and time --%>\par
+    <% \par
+        // Import required Java classes\par
+        java.util.Date currentDate = new java.util.Date();\par
+        \par
+        // Display the current date and time\par
+        out.println("<p>Current Date and Time: " + currentDate.toString() + "</p>");\par
+    %>\par
+</body>\par
+</html>\par
+//////////////////////////////////////////////////////////////////////////////////////////\par
+\par
+\par
+}
+ 
